@@ -1,5 +1,5 @@
 import React from 'react';  
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 interface ProductType {
   id: number;
@@ -20,15 +20,19 @@ function App() {
   const [name, setName] = useState('');
   const [explanation, setExplanation] = useState('');
   const [price, setPrice] = useState(0);
-  let fakeId= 0;
+  const fakeId = useRef(0);
+  const handleCreate = (newProduct: Omit<ProductType, 'id'>) => {
+    fakeId.current += 1;
+    setProducts([...products, { ...newProduct, id: fakeId.current }]);
+  }
+
   console.log(products);
   return (
     <>
     <form 
       onSubmit={(event) => { 
         event.preventDefault();
-        fakeId += 1;
-        setProducts([...products,{name, explanation, price, id: fakeId}]);
+        handleCreate({name, explanation, price});
         }}>
       <input onChange={(event) => setName(event.target.value)} type="text" placeholder="상품 이름" />
       <input onChange={(event) => setExplanation(event.target.value)} type="text" placeholder="상품 설명" />
