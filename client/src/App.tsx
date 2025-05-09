@@ -27,11 +27,11 @@ function App() {
     <form 
       onSubmit={(event) => { 
         event.preventDefault();
-        console.log("제출");
+        console.log(name, explanation, price)
         }}>
-      <input onChange={(event) => console.log("상품 이름이 변경되었습니다.", event.target.value)} type="text" placeholder="상품 이름" />
-      <input onChange={(event) => console.log("상품 설명이 변경되었습니다.", event.target.value)} type="text" placeholder="상품 설명" />
-      <input onChange={(event) => console.log("상품 가격이 변경되었습니다.", event.target.value)} type="number" placeholder="상품 가격" />
+      <input onChange={(event) => setName(event.target.value)} type="text" placeholder="상품 이름" />
+      <input onChange={(event) => setExplanation(event.target.value)} type="text" placeholder="상품 설명" />
+      <input onChange={(event) => setPrice(parseInt(event.target.value, 10))} type="number" placeholder="상품 가격" />
       <input type="submit" value="상품 만들기"/> 
     </form>
 
