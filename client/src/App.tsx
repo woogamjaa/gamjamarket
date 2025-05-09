@@ -9,7 +9,7 @@ interface ProductType {
 }
 
 function App() {
-  const [products , setProduct ] = useState<ProductType[]>([
+  const [products , setProducts ] = useState<ProductType[]>([
     {
     id: 102,
     name: '민영이 사랑해',
@@ -20,14 +20,15 @@ function App() {
   const [name, setName] = useState('');
   const [explanation, setExplanation] = useState('');
   const [price, setPrice] = useState(0);
-  
+  let fakeId= 0;
   console.log(products);
   return (
     <>
     <form 
       onSubmit={(event) => { 
         event.preventDefault();
-        console.log(name, explanation, price)
+        fakeId += 1;
+        setProducts([...products,{name, explanation, price, id: fakeId}]);
         }}>
       <input onChange={(event) => setName(event.target.value)} type="text" placeholder="상품 이름" />
       <input onChange={(event) => setExplanation(event.target.value)} type="text" placeholder="상품 설명" />
