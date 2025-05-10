@@ -10,9 +10,10 @@ interface ProductType {
 
 interface ProductItemProps {
   product: ProductType;
+  onDelete: (id: number) => void;
 }
 
-const ProductItem = ({ product }: ProductItemProps) => {
+const ProductItem = ({ product,onDelete }: ProductItemProps) => {
   const { id, name, explanation, price } = product;
   const [isEditMode, setIsEditMode] = useState(false);
   return (
@@ -21,7 +22,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
       <div>{name}</div>
       <div>{explanation}</div>
       <div>{price}</div>
-      <button type="button" onClick={()=> console.log("삭제하기")}>삭제</button>
+      <button type="button" onClick={()=> onDelete(id)}>삭제</button>
       <button type="button" onClick={()=> console.log("수정하기")}>수정</button>
     </div>
   );
@@ -38,7 +39,9 @@ function App() {
     fakeId.current += 1;
     setProducts([...products, { ...newProduct, id: fakeId.current }]);
   }
-
+  const handleDelete = (id: number) => {
+    setProducts(products.filter((product) => product.id !== id));
+  }
   console.log(products);
   return (
     <>
@@ -54,7 +57,7 @@ function App() {
     </form>
 
     {products.map((product) => (
-      <ProductItem key={product.id} product={product} />
+      <ProductItem key={product.id} product={product} onDelete={handleDelete} />
     ))}
     </>
   );
