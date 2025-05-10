@@ -11,9 +11,10 @@ interface ProductType {
 interface ProductItemProps {
   product: ProductType;
   onDelete: (id: number) => void;
+  onUpdate: (id: number) => void;
 }
 
-const ProductItem = ({ product,onDelete }: ProductItemProps) => {
+const ProductItem = ({ product,onDelete,onUpdate }: ProductItemProps) => {
   const { id, name, explanation, price } = product;
   const [isEditMode, setIsEditMode] = useState(false);
   return (
@@ -23,7 +24,19 @@ const ProductItem = ({ product,onDelete }: ProductItemProps) => {
       <div>{explanation}</div>
       <div>{price}</div>
       <button type="button" onClick={()=> onDelete(id)}>삭제</button>
-      <button type="button" onClick={()=> console.log("수정하기")}>수정</button>
+      <button type="button" onClick={()=> setIsEditMode((prev)=> !prev)}>수정</button>
+      {isEditMode && (
+        <form 
+        onSubmit={(event) => {
+          event.preventDefault();
+          onUpdate(id);
+        }}>
+          <input type="text" placeholder='상품 이름' />
+          <input type="text" placeholder='상품 설명' />
+          <input type="number" placeholder='상품 가격' />
+          <input type="submit" value="수정하기"/>
+        </form>
+      )}
     </div>
   );
 }
@@ -35,6 +48,7 @@ function App() {
   const [explanation, setExplanation] = useState('');
   const [price, setPrice] = useState(0);
   const fakeId = useRef(0);
+
   const handleCreate = (newProduct: Omit<ProductType, 'id'>) => {
     fakeId.current += 1;
     setProducts([...products, { ...newProduct, id: fakeId.current }]);
@@ -42,6 +56,17 @@ function App() {
   const handleDelete = (id: number) => {
     setProducts(products.filter((product) => product.id !== id));
   }
+
+  const handleUpdate = (id: number) => {
+    const updateProduct = {
+      id,
+      name: '수정된 이름',
+      explanation: '수정된 설명',
+      price: 0,
+    };
+    setProducts(products.map((product) => (product.id === id ? updateProduct : product)));
+  }
+
   console.log(products);
   return (
     <>
@@ -57,7 +82,7 @@ function App() {
     </form>
 
     {products.map((product) => (
-      <ProductItem key={product.id} product={product} onDelete={handleDelete} />
+      <ProductItem key={product.id} product={product} onDelete={handleDelete} onUpdate={handleUpdate} />
     ))}
     </>
   );
