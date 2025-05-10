@@ -11,12 +11,16 @@ interface ProductType {
 interface ProductItemProps {
   product: ProductType;
   onDelete: (id: number) => void;
-  onUpdate: (id: number) => void;
+  onUpdate: (product: ProductType) => void;
 }
 
 const ProductItem = ({ product,onDelete,onUpdate }: ProductItemProps) => {
   const { id, name, explanation, price } = product;
   const [isEditMode, setIsEditMode] = useState(false);
+  const [editName, setEditName] = useState(product.name);
+  const [editExplanation, setEditExplanation] = useState(product.explanation);
+  const [editPrice, setEditPrice] = useState(product.price);
+
   return (
     <div>
       <div>{id}</div>
@@ -29,11 +33,15 @@ const ProductItem = ({ product,onDelete,onUpdate }: ProductItemProps) => {
         <form 
         onSubmit={(event) => {
           event.preventDefault();
-          onUpdate(id);
+          onUpdate({id,
+            name: editName,
+            explanation: editExplanation,
+            price: editPrice,
+          });
         }}>
-          <input type="text" placeholder='상품 이름' />
-          <input type="text" placeholder='상품 설명' />
-          <input type="number" placeholder='상품 가격' />
+          <input type="text" placeholder='상품 이름' value={editName} onChange={(event)=> setEditName(event.target.value)}/>
+          <input type="text" placeholder='상품 설명' value={editExplanation} onChange={(event)=> setEditExplanation(event.target.value)} />
+          <input type="number" placeholder='상품 가격' value={editPrice} onChange={(event)=>setEditPrice(parseInt(event.target.value))}/>
           <input type="submit" value="수정하기"/>
         </form>
       )}
@@ -57,14 +65,13 @@ function App() {
     setProducts(products.filter((product) => product.id !== id));
   }
 
-  const handleUpdate = (id: number) => {
-    const updateProduct = {
-      id,
-      name: '수정된 이름',
-      explanation: '수정된 설명',
-      price: 0,
-    };
-    setProducts(products.map((product) => (product.id === id ? updateProduct : product)));
+  const handleUpdate = (updateProduct: {
+    id: number;
+    name: string;
+    explanation: string;
+    price: number;
+  }) => {
+    setProducts(products.map((product) => (product.id === updateProduct.id ? updateProduct : product)));
   }
 
   console.log(products);
