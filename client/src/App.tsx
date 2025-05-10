@@ -10,12 +10,6 @@ interface ProductType {
 
 function App() {
   const [products , setProducts ] = useState<ProductType[]>([
-    {
-    id: 102,
-    name: '민영이 사랑해',
-    explanation: '민영이 사랑해 2 ',
-    price: 2000000000
-    },
   ]);
   const [name, setName] = useState('');
   const [explanation, setExplanation] = useState('');
@@ -40,12 +34,15 @@ function App() {
       <input type="submit" value="상품 만들기"/> 
     </form>
 
-    {products.map((product) => (
-      <div key={product.id}>
-        <div>{product.id}</div>
-        <div>{product.name}</div>
-        <div>{product.explanation}</div>
-        <div>{product.price}</div>
+    {products.map(({id, name, price, explanation}) => (
+      <div key={id}>
+        <div>{id}</div>
+        <div>{name}</div>
+        <div>{explanation}</div>
+        <div>{price}</div>
+        <button type="button" onClick={()=>
+          setProducts(products.filter((products)=> products.id !== id))}>삭제
+        </button>
       </div>
     ))}
     </>
