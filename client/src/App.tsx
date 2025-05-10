@@ -8,6 +8,25 @@ interface ProductType {
   price: number;
 }
 
+interface ProductItemProps {
+  product: ProductType;
+}
+
+const ProductItem = ({ product }: ProductItemProps) => {
+  const { id, name, explanation, price } = product;
+  const [isEditMode, setIsEditMode] = useState(false);
+  return (
+    <div>
+      <div>{id}</div>
+      <div>{name}</div>
+      <div>{explanation}</div>
+      <div>{price}</div>
+      <button type="button" onClick={()=> console.log("삭제하기")}>삭제</button>
+      <button type="button" onClick={()=> console.log("수정하기")}>수정</button>
+    </div>
+  );
+}
+
 function App() {
   const [products , setProducts ] = useState<ProductType[]>([
   ]);
@@ -34,16 +53,8 @@ function App() {
       <input type="submit" value="상품 만들기"/> 
     </form>
 
-    {products.map(({id, name, price, explanation}) => (
-      <div key={id}>
-        <div>{id}</div>
-        <div>{name}</div>
-        <div>{explanation}</div>
-        <div>{price}</div>
-        <button type="button" onClick={()=>
-          setProducts(products.filter((products)=> products.id !== id))}>삭제
-        </button>
-      </div>
+    {products.map((product) => (
+      <ProductItem key={product.id} product={product} />
     ))}
     </>
   );
