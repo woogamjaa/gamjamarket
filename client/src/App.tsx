@@ -6,7 +6,7 @@ function App() {
     return (
       <Routes>
         <Route index element={<HomePage />} />
-        <Route path="/:products" element={<ProductPage />} />
+        <Route path="/:productId" element={<ProductPage />} />
       </Routes>
   );
 }
